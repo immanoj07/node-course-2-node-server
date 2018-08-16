@@ -3,6 +3,7 @@ const hbs = require('hbs');
 
 const app = express();
 const fs = require('fs')
+const port = process.env.PORT || 3000
 
 app.set('view engine', 'hbs')
 hbs.registerPartials(__dirname + '/views/partials')
@@ -20,11 +21,18 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use((req, res, next) => {
-    res.render('maintenance.hbs')
-})
+// app.use((req, res, next) => {
+//     res.render('maintenance.hbs')
+// })
 
 app.use(express.static(__dirname + '/public'))
+app.get('/projects', (req, res) => {
+    console.log('something woring')
+    res.render('projects.hbs', {
+        pageTitle: 'These are my projects',
+        copyRightYear: new Date().getFullYear()
+    })
+})
 
 app.get('/', (req, res) => {
     res.render('home.hbs', {
@@ -32,9 +40,15 @@ app.get('/', (req, res) => {
         copyRightYear: new Date().getFullYear()
     })
 });
-app.get('/info.html', (req, res) => {
+app.get('/about', (req, res) => {
     res.render('about.hbs', {
         pageTitle: 'about new page',
+        copyRightYear: new Date().getFullYear()
+    })
+})
+app.get('/home', (req, res) => {
+    res.render('home.hbs', {
+        pageTitle: 'about home page',
         copyRightYear: new Date().getFullYear()
     })
 })
@@ -49,4 +63,6 @@ app.get('/bad', (req, res) => {
 
 
 
-app.listen(3000)
+app.listen(port, () => {
+    console.log(`Listening for requests at port: ${port}`)
+})
